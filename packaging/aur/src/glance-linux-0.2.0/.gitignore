@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+*.onnx
+*.task
+.pytest_cache/
+models/
+*.so
+*.egg-info/
+reference/

@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "glanced"
+version = "0.2.0"
+description = "Face unlock for Linux with real liveness detection"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+
+# The liveness model itself needs only numpy. Everything heavier is optional so
+# the decision logic stays importable — and testable — on a machine with no
+# camera, no ONNX runtime and no MediaPipe.
+dependencies = ["numpy>=1.26"]
+
+[project.optional-dependencies]
+runtime = [
+    "opencv-python>=4.9",
+    "onnxruntime>=1.17",
+    "mediapipe>=0.10.14",
+    "cryptography>=42",
+]
+dev = ["pytest>=8"]
+# Only `glancectl enroll --gui` imports Qt. The headless enroll, the daemon and
+# the PAM path all work without it, so it is not part of `runtime`.
+gui = ["PySide6>=6.6"]
+
+[project.scripts]
+glancectl = "glanced.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
