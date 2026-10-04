@@ -48,9 +48,9 @@ class FaceProcessor:
         self.landmarker = Landmarker(landmarker_task or paths.landmarker_task())
         self.embedder = None
         if embed:
-            from .embed import ArcFaceEmbedder
+            from .embed_worker import IsolatedArcFaceEmbedder
 
-            self.embedder = ArcFaceEmbedder(arcface_model or paths.arcface_model())
+            self.embedder = IsolatedArcFaceEmbedder(arcface_model or paths.arcface_model())
 
     def process(
         self, native_rgb: np.ndarray, now: Optional[float] = None, *, want_embedding: bool = True
@@ -93,3 +93,5 @@ class FaceProcessor:
 
     def close(self) -> None:
         self.landmarker.close()
+        if self.embedder is not None:
+            self.embedder.close()
